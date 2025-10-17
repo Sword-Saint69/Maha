@@ -2,6 +2,7 @@
 
 import { FloatingDock } from "@/components/ui/floating-dock";
 import Carousel from "@/components/ui/carousel";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import {
   IconBrandGithub,
   IconBrandX,
@@ -77,6 +78,9 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-start pt-16">
+      <div className="absolute top-4 left-4 w-48 h-24">
+        <TextHoverEffect text="Maha" />
+      </div>
       <div className="mt-8">
         <Carousel slides={carouselSlides} />
       </div>
