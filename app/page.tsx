@@ -4,6 +4,7 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 import MusicCardGrid from "@/components/music-card-grid";
 import MusicPlayer from "@/components/music-player";
 import SettingsPage from "@/components/settings-page";
+import StatsPage from "@/components/stats-page";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { TracingBeam } from "@/components/ui/tracing-beam";
@@ -18,6 +19,7 @@ import {
   IconHome,
   IconFolder,
   IconInfoCircle,
+  IconChartBar,
 } from "@tabler/icons-react";
 
 export default function Home() {
@@ -27,7 +29,7 @@ export default function Home() {
   const [currentTrack, setCurrentTrack] = useState<MusicFile | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [currentView, setCurrentView] = useState<'home' | 'settings' | 'about'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'settings' | 'about' | 'stats'>('home');
 
   // Load music files from localStorage on mount
   useEffect(() => {
@@ -176,6 +178,14 @@ export default function Home() {
       onClick: handleMusicFolderSelect,
     },
     {
+      title: "Statistics",
+      icon: (
+        <IconChartBar className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('stats'),
+    },
+    {
       title: "About",
       icon: (
         <IconInfoCircle className="h-full w-full text-neutral-500 dark:text-neutral-300" />
@@ -250,15 +260,123 @@ export default function Home() {
           <TracingBeam className="px-6">
             <SettingsPage />
           </TracingBeam>
+        ) : currentView === 'stats' ? (
+          <div className="px-6">
+            <StatsPage allTracks={musicFiles} onPlayTrack={handlePlayTrack} />
+          </div>
         ) : (
           <TracingBeam className="px-6">
             <div className="w-full max-w-4xl mx-auto px-6 py-8">
-              <div className="text-center py-20">
-                <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+              <div className="text-center py-12">
+                <h1 className="text-5xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>
                   About Maha Music Player
                 </h1>
-                <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
-                  This page is currently under construction. Check back soon!
+                <p className="text-xl mb-12" style={{ color: 'var(--text-secondary)' }}>
+                  A powerful, feature-rich music player built with modern web technologies
+                </p>
+              </div>
+
+              {/* Features Section */}
+              <div className="mb-12 p-6 rounded-lg" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', border: '1px solid' }}>
+                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Features</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    'Advanced Music Library Management',
+                    'Detailed Listening Statistics',
+                    'Customizable Themes',
+                    'Audio Enhancement Controls',
+                    'Playlist Management',
+                    'Smart Search & Filters',
+                    'High-Performance Playback',
+                    'Beautiful Modern UI'
+                  ].map((feature, index) => (
+                    <div key={index} className="p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                      <p style={{ color: 'var(--text-primary)' }}>{feature}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tech Stack */}
+              <div className="mb-12 p-6 rounded-lg" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', border: '1px solid' }}>
+                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Built With</h2>
+                <div className="flex flex-wrap gap-3">
+                  {['Next.js', 'React', 'TypeScript', 'Electron', 'Tailwind CSS', 'Howler.js', 'Motion'].map((tech) => (
+                    <span 
+                      key={tech}
+                      className="px-4 py-2 rounded-full text-sm font-medium"
+                      style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Made with Love */}
+              <div className="text-center py-8 px-6 rounded-lg mb-8" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', border: '1px solid' }}>
+                <div className="mb-6">
+                  <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                    Made with ❤️ by Goutham
+                  </h2>
+                  <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
+                    Passionate about creating beautiful music experiences
+                  </p>
+                </div>
+
+                {/* Social Links */}
+                <div className="flex justify-center gap-4 mb-6">
+                  <button
+                    onClick={() => handleSocialClick('https://github.com/Sword-saint69')}
+                    className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all hover:scale-105"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                  >
+                    <IconBrandGithub className="w-6 h-6" />
+                    <span className="font-medium">GitHub</span>
+                  </button>
+                  <button
+                    onClick={() => handleSocialClick('https://instagram.com/_gouth.ammmm')}
+                    className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all hover:scale-105"
+                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                  >
+                    <IconBrandInstagram className="w-6 h-6" />
+                    <span className="font-medium">Instagram</span>
+                  </button>
+                </div>
+
+                {/* Links Display */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <IconBrandGithub className="w-4 h-4" />
+                    <a 
+                      href="https://github.com/Sword-saint69" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      github.com/Sword-saint69
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <IconBrandInstagram className="w-4 h-4" />
+                    <a 
+                      href="https://instagram.com/_gouth.ammmm" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      instagram.com/_gouth.ammmm
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="text-center py-6">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  © 2024 Maha Music Player. All rights reserved.
                 </p>
               </div>
             </div>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Howl } from "howler";
 import type { MusicFile } from "@/electron/electron.d";
+import { StatsManager } from "@/lib/music-library";
 import {
   IconPlayerPlay,
   IconPlayerPause,
@@ -65,6 +66,8 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
           console.log('Playing:', currentTrack.title);
           setIsPlaying(true);
           startProgressInterval();
+          // Track play count
+          StatsManager.incrementPlayCount(currentTrack.filePath);
         },
         onpause: () => {
           setIsPlaying(false);
