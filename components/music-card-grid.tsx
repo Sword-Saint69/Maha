@@ -13,6 +13,50 @@ export default function MusicCardGrid({ musicFiles, onPlayTrack }: MusicCardGrid
   const id = useId();
   const defaultCover = "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&auto=format&fit=crop&q=60";
 
+  // Debug: Log cover art info
+  if (musicFiles.length > 0 && musicFiles[0].coverArt) {
+    console.log('=== COVER ART DEBUG ===');
+    console.log('First track:', musicFiles[0].title);
+    console.log('Has coverArt:', !!musicFiles[0].coverArt);
+    console.log('CoverArt length:', musicFiles[0].coverArt?.length);
+    console.log('CoverArt starts with:', musicFiles[0].coverArt?.substring(0, 100));
+    console.log('Is valid data URI:', musicFiles[0].coverArt?.startsWith('data:image/'));
+    console.log('Contains base64:', musicFiles[0].coverArt?.includes(';base64,'));
+    
+    // Check if base64 part is valid
+    const base64Match = musicFiles[0].coverArt?.match(/data:([^;]+);base64,(.+)/);
+    if (base64Match) {
+      console.log('MIME type:', base64Match[1]);
+      console.log('Base64 length:', base64Match[2].length);
+      console.log('Base64 first 50 chars:', base64Match[2].substring(0, 50));
+    } else {
+      console.error('❌ Not a valid base64 data URI!');
+    }
+    
+    // Test if we can create an image from it
+    const testImg = new Image();
+    testImg.onload = () => console.log('✓ Test image loaded successfully!');
+    testImg.onerror = (e) => {
+      console.error('✗ Test image failed to load');
+      console.error('Error event:', e);
+      console.error('Image src was:', testImg.src.substring(0, 200));
+    };
+    testImg.src = musicFiles[0].coverArt;
+  }
+
+  // Helper function to get safe image source
+  const getSafeImageSrc = (coverArt: string | null) => {
+    if (!coverArt) return defaultCover;
+    
+    // Validate data URI format
+    if (!coverArt.startsWith('data:image/')) {
+      console.warn('Invalid cover art format:', coverArt.substring(0, 50));
+      return defaultCover;
+    }
+    
+    return coverArt;
+  };
+
   return (
     <>
       {musicFiles.length === 0 ? (
@@ -37,9 +81,30 @@ export default function MusicCardGrid({ musicFiles, onPlayTrack }: MusicCardGrid
                   <img
                     width={200}
                     height={200}
-                    src={card.coverArt || defaultCover}
+                    src={getSafeImageSrc(card.coverArt)}
                     alt={card.title}
                     className="h-44 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-110"
+                    onLoad={(e) => {
+                      if (card.coverArt) {
+                        console.log('✓ Cover loaded successfully for:', card.title);
+                      }
+                    }}
+                    onError={(e) => {
+                      if (card.coverArt) {
+                        console.error('=== IMAGE LOAD ERROR ===');
+                        console.error('✗ Cover art failed to load for:', card.title);
+                        console.error('  Starts with:', card.coverArt.substring(0, 100));
+                        console.error('  Length:', card.coverArt.length);
+                        console.error('  Contains base64:', card.coverArt.includes('base64'));
+                        console.error('  Error event:', e);
+                        
+                        // Try to identify the issue
+                        if (!card.coverArt.startsWith('data:image/')) {
+                          console.error('  ERROR: Invalid data URI format!');
+                        }
+                      }
+                      (e.target as HTMLImageElement).src = defaultCover;
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <button

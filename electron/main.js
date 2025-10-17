@@ -105,9 +105,37 @@ app.whenReady().then(() => {
             if (stats.isFile()) {
               console.log(`Processing: ${file}`);
               const metadata = await mm.parseFile(filePath);
-              const coverArt = metadata.common.picture && metadata.common.picture[0]
-                ? `data:${metadata.common.picture[0].format};base64,${metadata.common.picture[0].data.toString('base64')}`
-                : null;
+              
+              let coverArt = null;
+              if (metadata.common.picture && metadata.common.picture[0]) {
+                const picture = metadata.common.picture[0];
+                // Map the format to proper MIME type
+                let mimeType = picture.format;
+                if (mimeType === 'image/jpg') {
+                  mimeType = 'image/jpeg';
+                }
+                // Ensure MIME type includes 'image/'
+                if (!mimeType.startsWith('image/')) {
+                  mimeType = `image/${mimeType}`;
+                }
+                
+                // Ensure picture.data is a Buffer
+                const imageBuffer = Buffer.isBuffer(picture.data) 
+                  ? picture.data 
+                  : Buffer.from(picture.data);
+                
+                // Create base64 data URI
+                const base64Data = imageBuffer.toString('base64');
+                coverArt = `data:${mimeType};base64,${base64Data}`;
+                
+                console.log(`✓ Cover art found for: ${file}`);
+                console.log(`  Original format: ${picture.format}, MIME type: ${mimeType}`);
+                console.log(`  Buffer check: ${Buffer.isBuffer(picture.data)}`);
+                console.log(`  Size: ${imageBuffer.length} bytes, Base64 length: ${base64Data.length}`);
+                console.log(`  Base64 preview: ${base64Data.substring(0, 50)}...`);
+              } else {
+                console.log(`✗ No cover art for: ${file}`);
+              }
               
               musicFiles.push({
                 title: metadata.common.title || path.basename(file, ext),

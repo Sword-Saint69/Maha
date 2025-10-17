@@ -95,6 +95,14 @@ export default function Home() {
             if (scanResult.success && scanResult.files) {
               setMusicFiles(scanResult.files);
               setFilteredMusicFiles(scanResult.files);
+              
+              // Debug: Check cover art in loaded files
+              const filesWithCover = scanResult.files.filter(f => f.coverArt);
+              console.log(`Loaded ${scanResult.files.length} files, ${filesWithCover.length} have cover art`);
+              if (filesWithCover.length > 0) {
+                console.log('Sample cover art:', filesWithCover[0].coverArt?.substring(0, 100));
+              }
+              
               alert(`Successfully loaded ${scanResult.files.length} music files!`);
             } else {
               alert(`Error scanning folder: ${scanResult.error || 'Unknown error'}`);

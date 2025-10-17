@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Howl } from "howler";
 import type { MusicFile } from "@/electron/electron.d";
 import { StatsManager } from "@/lib/music-library";
+import { useTheme } from "@/contexts/ThemeContext";
 import Equalizer from "./equalizer";
 import {
   IconPlayerPlay,
@@ -22,6 +23,7 @@ interface MusicPlayerProps {
 }
 
 export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicPlayerProps) {
+  const { playerStyle } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -69,7 +71,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
       const sound = new Howl({
         src: [currentTrack.filePath],
         html5: true,
-        volume: (volume * volumeAmplification) / 100,
+        volume: Math.min(1.0, (volume * volumeAmplification) / 100),
         rate: playbackSpeed,
         format: ['mp3', 'm4a', 'flac', 'wav', 'ogg', 'aac'],
         onplay: () => {
@@ -144,8 +146,8 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (soundRef.current) {
-      // Apply volume amplification
-      const amplifiedVolume = (newVolume * volumeAmplification) / 100;
+      // Apply volume amplification, clamped to max 1.0
+      const amplifiedVolume = Math.min(1.0, (newVolume * volumeAmplification) / 100);
       soundRef.current.volume(amplifiedVolume);
     }
     if (newVolume > 0) {
@@ -156,7 +158,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
   // Update volume when amplification changes
   useEffect(() => {
     if (soundRef.current && !isMuted) {
-      const amplifiedVolume = (volume * volumeAmplification) / 100;
+      const amplifiedVolume = Math.min(1.0, (volume * volumeAmplification) / 100);
       soundRef.current.volume(amplifiedVolume);
     }
   }, [volumeAmplification]);
@@ -195,12 +197,136 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
 
   const defaultCover = "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=80&h=80&auto=format&fit=crop&q=60";
 
+  // Get player style classes
+  const getPlayerClasses = () => {
+    switch (playerStyle) {
+      case 'minimal':
+        return 'py-2 bg-black/95';
+      case 'compact':
+        return 'py-3 bg-neutral-950';
+      case 'expanded':
+        return 'py-8 bg-gradient-to-t from-purple-950/30 via-black to-black';
+      case 'glassmorphism':
+        return 'py-4 backdrop-blur-3xl bg-white/5 border-t-2 border-white/10';
+      case 'neon':
+        return 'py-4 bg-black shadow-[0_-5px_50px_rgba(139,92,246,0.5)] border-t-2 border-purple-500';
+      case 'retro':
+        return 'py-5 bg-gradient-to-r from-purple-900 via-pink-800 to-orange-700 border-t-4 border-cyan-400';
+      case 'material':
+        return 'py-4 bg-neutral-900 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]';
+      case 'neumorphism':
+        return 'py-5 bg-neutral-800 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6),0_4px_12px_rgba(255,255,255,0.1)]';
+      case 'brutalist':
+        return 'py-4 bg-white text-black border-t-8 border-black';
+      case 'vinyl':
+        return 'py-5 bg-gradient-to-b from-amber-900 to-amber-950 border-t-4 border-amber-600';
+      case 'futuristic':
+        return 'py-4 bg-gradient-to-t from-cyan-950 via-blue-950 to-black border-t-2 border-cyan-400 shadow-[0_-5px_30px_rgba(0,255,255,0.3)]';
+      case 'minimalist-pro':
+        return 'py-2 bg-white border-t border-gray-200';
+      case 'ambient':
+        return 'py-6 bg-gradient-to-t from-indigo-950/40 via-purple-950/20 to-transparent backdrop-blur-2xl';
+      case 'disco':
+        return 'py-4 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 animate-gradient-x';
+      case 'terminal':
+        return 'py-3 bg-black border-t-2 border-green-500 font-mono';
+      default:
+        return 'py-4 bg-gradient-to-t from-black via-neutral-900 to-neutral-900/95';
+    }
+  };
+
+  const getAlbumArtClasses = () => {
+    const baseClasses = {
+      'minimal': 'w-10 h-10',
+      'compact': 'w-14 h-14',
+      'expanded': 'w-24 h-24',
+      'vinyl': `w-20 h-20 rounded-full border-4 border-amber-700 ${isPlaying ? 'animate-spin-slow' : ''}`,
+      'neon': 'w-16 h-16 shadow-[0_0_30px_rgba(139,92,246,0.8)] ring-4 ring-purple-500',
+      'brutalist': 'w-16 h-16 border-4 border-black',
+      'glassmorphism': 'w-16 h-16 ring-2 ring-white/30',
+      'retro': 'w-16 h-16 border-2 border-cyan-400',
+      'terminal': 'w-12 h-12 border border-green-500',
+      'futuristic': 'w-16 h-16 ring-2 ring-cyan-400 shadow-[0_0_20px_rgba(0,255,255,0.5)]',
+      'minimalist-pro': 'w-14 h-14 rounded-sm',
+    };
+    return baseClasses[playerStyle as keyof typeof baseClasses] || 'w-16 h-16';
+  };
+
+  const getTextColor = () => {
+    switch (playerStyle) {
+      case 'brutalist':
+        return 'text-black';
+      case 'minimalist-pro':
+        return 'text-neutral-900';
+      case 'terminal':
+        return 'text-green-400';
+      case 'retro':
+        return 'text-cyan-200';
+      default:
+        return 'text-white';
+    }
+  };
+
+  const getSecondaryTextColor = () => {
+    switch (playerStyle) {
+      case 'brutalist':
+        return 'text-neutral-700';
+      case 'minimalist-pro':
+        return 'text-neutral-600';
+      case 'terminal':
+        return 'text-green-600';
+      case 'retro':
+        return 'text-cyan-400';
+      default:
+        return 'text-neutral-400';
+    }
+  };
+
+  const getPlayButtonClasses = () => {
+    switch (playerStyle) {
+      case 'neon':
+        return 'bg-purple-500 hover:bg-purple-600 shadow-[0_0_40px_rgba(139,92,246,1)] ring-4 ring-purple-400';
+      case 'retro':
+        return 'bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 shadow-[0_0_20px_rgba(236,72,153,0.8)]';
+      case 'brutalist':
+        return 'bg-black text-white hover:bg-neutral-800 border-4 border-white rounded-none';
+      case 'glassmorphism':
+        return 'bg-white/30 backdrop-blur-xl border-2 border-white/50 hover:bg-white/40 shadow-lg';
+      case 'minimal':
+        return 'bg-neutral-800 hover:bg-neutral-700 text-white shadow-sm';
+      case 'vinyl':
+        return 'bg-amber-600 hover:bg-amber-700 text-white shadow-xl';
+      case 'futuristic':
+        return 'bg-cyan-500 hover:bg-cyan-600 text-black shadow-[0_0_30px_rgba(0,255,255,0.8)] ring-2 ring-cyan-400';
+      case 'terminal':
+        return 'bg-green-500 hover:bg-green-600 text-black font-mono rounded-none';
+      case 'disco':
+        return 'bg-white text-purple-600 hover:bg-gray-100 shadow-[0_0_30px_rgba(255,255,255,0.8)]';
+      case 'minimalist-pro':
+        return 'bg-black text-white hover:bg-neutral-800 rounded-full shadow-md';
+      default:
+        return 'bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600';
+    }
+  };
+
   if (!currentTrack) {
     return null;
   }
 
+  // Check if current style is coming soon
+  const comingSoonStyles = ['aqua', 'cosmic', 'paper', 'holographic'];
+  const isComingSoon = comingSoonStyles.includes(playerStyle);
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black via-neutral-900 to-neutral-900/95 backdrop-blur-xl border-t border-neutral-800/50 px-6 py-4 z-50 shadow-2xl">
+    <div className={`fixed bottom-0 left-0 right-0 backdrop-blur-xl border-t border-neutral-800/50 px-6 z-50 shadow-2xl ${getPlayerClasses()} relative`}>
+      {isComingSoon && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-10">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-purple-400 mb-2">🚧 Coming Soon 🚧</div>
+            <div className="text-sm text-neutral-400">This player style is under development</div>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto flex items-center gap-6">
         {/* Album Art & Track Info */}
         <div className="flex items-center gap-4 min-w-[280px]">
@@ -208,7 +334,11 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
             <img
               src={currentTrack.coverArt || defaultCover}
               alt={currentTrack.title}
-              className="w-16 h-16 rounded-lg object-cover shadow-lg ring-2 ring-white/10 group-hover:ring-purple-500/50 transition-all duration-300"
+              className={`${getAlbumArtClasses()} rounded-lg object-cover shadow-lg ring-2 ring-white/10 group-hover:ring-purple-500/50 transition-all duration-300`}
+              onError={(e) => {
+                console.log('Cover art failed to load in player for:', currentTrack.title);
+                (e.target as HTMLImageElement).src = defaultCover;
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
@@ -239,7 +369,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
             </button>
             <button
               onClick={togglePlayPause}
-              className="bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full p-3 hover:scale-110 transition-all duration-200 active:scale-95 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+              className={`${getPlayButtonClasses()} text-white rounded-full p-3 hover:scale-110 transition-all duration-200 active:scale-95 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50`}
               title={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (

@@ -10,7 +10,7 @@ import {
   IconPlayerPause,
   IconTrash,
   IconPlaylistAdd,
-  IconShuffle,
+  IconArrowsShuffle,
   IconRepeat,
 } from '@tabler/icons-react';
 
@@ -76,7 +76,7 @@ export default function QueuePage({
             color: shuffle ? 'white' : 'var(--text-primary)',
           }}
         >
-          <IconShuffle className="w-4 h-4" />
+          <IconArrowsShuffle className="w-4 h-4" />
           Shuffle {shuffle && '(On)'}
         </button>
 
