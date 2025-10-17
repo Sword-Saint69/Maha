@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs').promises;
+const mm = require('music-metadata');
 
 let mainWindow;
 
@@ -58,6 +60,50 @@ app.whenReady().then(() => {
       return { success: true, path: result.filePaths[0] };
     }
     return { success: false, path: null };
+  });
+
+  // Scan music folder and extract metadata
+  ipcMain.handle('music:scanFolder', async (event, folderPath) => {
+    try {
+      const musicFiles = [];
+      const files = await fs.readdir(folderPath);
+      
+      const supportedFormats = ['.mp3', '.m4a', '.flac', '.wav', '.ogg', '.aac'];
+      
+      for (const file of files) {
+        const filePath = path.join(folderPath, file);
+        const ext = path.extname(file).toLowerCase();
+        
+        if (supportedFormats.includes(ext)) {
+          try {
+            const stats = await fs.stat(filePath);
+            if (stats.isFile()) {
+              const metadata = await mm.parseFile(filePath);
+              const coverArt = metadata.common.picture && metadata.common.picture[0]
+                ? `data:${metadata.common.picture[0].format};base64,${metadata.common.picture[0].data.toString('base64')}`
+                : null;
+              
+              musicFiles.push({
+                title: metadata.common.title || path.basename(file, ext),
+                artist: metadata.common.artist || 'Unknown Artist',
+                album: metadata.common.album || 'Unknown Album',
+                duration: metadata.format.duration || 0,
+                filePath: filePath,
+                coverArt: coverArt,
+                year: metadata.common.year || null,
+              });
+            }
+          } catch (error) {
+            console.error(`Error reading metadata for ${file}:`, error);
+          }
+        }
+      }
+      
+      return { success: true, files: musicFiles };
+    } catch (error) {
+      console.error('Error scanning folder:', error);
+      return { success: false, error: error.message };
+    }
   });
 
   app.on('activate', () => {

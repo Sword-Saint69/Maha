@@ -30,4 +30,6 @@ contextBridge.exposeInMainWorld('electron', {
   },
   // Music folder selection
   selectMusicFolder: () => ipcRenderer.invoke('dialog:openMusicFolder'),
+  // Music folder scanning
+  scanMusicFolder: (folderPath) => ipcRenderer.invoke('music:scanFolder', folderPath),
 });
