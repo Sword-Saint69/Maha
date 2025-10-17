@@ -196,7 +196,7 @@ export default function Home() {
         <IconBrandInstagram className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
-      onClick: () => handleSocialClick('https://instagram.com'),
+      onClick: () => handleSocialClick('https://instagram.com/_gouth.ammmm'),
     },
     {
       title: "GitHub",
@@ -204,7 +204,7 @@ export default function Home() {
         <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
-      onClick: () => handleSocialClick('https://github.com'),
+      onClick: () => handleSocialClick('https://github.com/Sword-saint69'),
     },
   ];
 

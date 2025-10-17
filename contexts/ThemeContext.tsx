@@ -346,6 +346,198 @@ export const themes: Theme[] = [
       border: '#3c4270',
     },
   },
+  {
+    id: 'mint',
+    name: 'Mint Fresh',
+    colors: {
+      background: '#0a1f1a',
+      foreground: '#143329',
+      primary: '#00d9a3',
+      secondary: '#00b386',
+      accent: '#3dffc7',
+      card: '#1f4d3d',
+      cardHover: '#2d6650',
+      text: '#e6fff7',
+      textSecondary: '#b3ffe6',
+      border: '#008066',
+    },
+  },
+  {
+    id: 'coral',
+    name: 'Coral Reef',
+    colors: {
+      background: '#1f0a14',
+      foreground: '#331427',
+      primary: '#ff6b9d',
+      secondary: '#ff3d7f',
+      accent: '#ffb3d1',
+      card: '#4d1f33',
+      cardHover: '#662940',
+      text: '#ffe6f0',
+      textSecondary: '#ffcce0',
+      border: '#cc0052',
+    },
+  },
+  {
+    id: 'golden',
+    name: 'Golden Hour',
+    colors: {
+      background: '#1f1a0a',
+      foreground: '#332d14',
+      primary: '#ffd700',
+      secondary: '#ffb300',
+      accent: '#ffed4e',
+      card: '#4d3d1f',
+      cardHover: '#66502d',
+      text: '#fffae6',
+      textSecondary: '#fff0b3',
+      border: '#cc9900',
+    },
+  },
+  {
+    id: 'amethyst',
+    name: 'Amethyst',
+    colors: {
+      background: '#1a0a1f',
+      foreground: '#2d1433',
+      primary: '#b19cd9',
+      secondary: '#9370db',
+      accent: '#dda0dd',
+      card: '#3d1f4d',
+      cardHover: '#502966',
+      text: '#f5e6ff',
+      textSecondary: '#e0ccff',
+      border: '#7a52a3',
+    },
+  },
+  {
+    id: 'neon-green',
+    name: 'Neon Green',
+    colors: {
+      background: '#0a1f0a',
+      foreground: '#143314',
+      primary: '#39ff14',
+      secondary: '#00ff00',
+      accent: '#7fff00',
+      card: '#1f4d1f',
+      cardHover: '#2d662d',
+      text: '#e6ffe6',
+      textSecondary: '#b3ffb3',
+      border: '#00cc00',
+    },
+  },
+  {
+    id: 'royal',
+    name: 'Royal Purple',
+    colors: {
+      background: '#0f0a1f',
+      foreground: '#1a1433',
+      primary: '#7851a9',
+      secondary: '#5e3a87',
+      accent: '#9d7ebd',
+      card: '#2d1f4d',
+      cardHover: '#3d2966',
+      text: '#f0e6ff',
+      textSecondary: '#d4b3ff',
+      border: '#522e80',
+    },
+  },
+  {
+    id: 'turquoise',
+    name: 'Turquoise Dream',
+    colors: {
+      background: '#0a1f1f',
+      foreground: '#143333',
+      primary: '#40e0d0',
+      secondary: '#00ced1',
+      accent: '#7fffd4',
+      card: '#1f4d4d',
+      cardHover: '#2d6666',
+      text: '#e6ffff',
+      textSecondary: '#b3f5f5',
+      border: '#008b8b',
+    },
+  },
+  {
+    id: 'crimson',
+    name: 'Crimson Night',
+    colors: {
+      background: '#1f0a0a',
+      foreground: '#331414',
+      primary: '#dc143c',
+      secondary: '#b22222',
+      accent: '#ff6b7a',
+      card: '#4d1f1f',
+      cardHover: '#662d2d',
+      text: '#ffe6e6',
+      textSecondary: '#ffb3b3',
+      border: '#8b0000',
+    },
+  },
+  {
+    id: 'lime',
+    name: 'Lime Electric',
+    colors: {
+      background: '#141f0a',
+      foreground: '#1f3314',
+      primary: '#bfff00',
+      secondary: '#9acd32',
+      accent: '#d4ff3d',
+      card: '#334d1f',
+      cardHover: '#476629',
+      text: '#f5ffe6',
+      textSecondary: '#e0ffb3',
+      border: '#7a9900',
+    },
+  },
+  {
+    id: 'indigo',
+    name: 'Indigo Depths',
+    colors: {
+      background: '#0a0a1f',
+      foreground: '#141433',
+      primary: '#4b0082',
+      secondary: '#6a0dad',
+      accent: '#9370db',
+      card: '#1f1f4d',
+      cardHover: '#2d2d66',
+      text: '#e6e6ff',
+      textSecondary: '#b3b3ff',
+      border: '#3d0066',
+    },
+  },
+  {
+    id: 'peach',
+    name: 'Peach Sunset',
+    colors: {
+      background: '#1f140a',
+      foreground: '#332314',
+      primary: '#ffb07c',
+      secondary: '#ff8c42',
+      accent: '#ffd4a3',
+      card: '#4d331f',
+      cardHover: '#66472d',
+      text: '#fff0e6',
+      textSecondary: '#ffe0b3',
+      border: '#cc6600',
+    },
+  },
+  {
+    id: 'steel',
+    name: 'Steel Gray',
+    colors: {
+      background: '#0f0f0f',
+      foreground: '#1a1a1a',
+      primary: '#b0c4de',
+      secondary: '#778899',
+      accent: '#d3d3d3',
+      card: '#2d2d2d',
+      cardHover: '#3d3d3d',
+      text: '#f0f0f0',
+      textSecondary: '#c0c0c0',
+      border: '#505050',
+    },
+  },
 ];
 
 export const playerStyles: PlayerStyle[] = [
@@ -374,6 +566,81 @@ export const playerStyles: PlayerStyle[] = [
     name: 'Glassmorphism',
     description: 'Modern frosted glass effect with vibrant colors'
   },
+  {
+    id: 'neon',
+    name: 'Neon Glow',
+    description: 'Vibrant neon lights with glowing effects'
+  },
+  {
+    id: 'retro',
+    name: 'Retro Wave',
+    description: '80s inspired synthwave aesthetic'
+  },
+  {
+    id: 'material',
+    name: 'Material Design',
+    description: 'Google Material Design principles'
+  },
+  {
+    id: 'neumorphism',
+    name: 'Neumorphism',
+    description: 'Soft shadows and subtle depth effects'
+  },
+  {
+    id: 'brutalist',
+    name: 'Brutalist',
+    description: 'Bold, raw, and unapologetic design'
+  },
+  {
+    id: 'vinyl',
+    name: 'Vinyl Record',
+    description: 'Classic vinyl player experience'
+  },
+  {
+    id: 'futuristic',
+    name: 'Futuristic',
+    description: 'Sci-fi inspired interface'
+  },
+  {
+    id: 'minimalist-pro',
+    name: 'Minimalist Pro',
+    description: 'Ultra-clean professional interface'
+  },
+  {
+    id: 'ambient',
+    name: 'Ambient',
+    description: 'Soft, calming, atmospheric design'
+  },
+  {
+    id: 'disco',
+    name: 'Disco Ball',
+    description: 'Party-ready with sparkle effects'
+  },
+  {
+    id: 'terminal',
+    name: 'Terminal',
+    description: 'Hacker-style command line aesthetic'
+  },
+  {
+    id: 'aqua',
+    name: 'Aqua Waves',
+    description: 'Flowing water-inspired animations'
+  },
+  {
+    id: 'cosmic',
+    name: 'Cosmic',
+    description: 'Space-themed with stars and nebula'
+  },
+  {
+    id: 'paper',
+    name: 'Paper Texture',
+    description: 'Natural paper-like material design'
+  },
+  {
+    id: 'holographic',
+    name: 'Holographic',
+    description: 'Iridescent rainbow shimmer effects'
+  },
 ];
 
 interface ThemeContextType {
@@ -383,6 +650,10 @@ interface ThemeContextType {
   playerStyle: string;
   setPlayerStyle: (styleId: string) => void;
   playerStyles: PlayerStyle[];
+  customThemes: Theme[];
+  addCustomTheme: (theme: Theme) => void;
+  deleteCustomTheme: (themeId: string) => void;
+  updateCustomTheme: (theme: Theme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -390,11 +661,24 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<Theme>(themes[0]);
   const [currentPlayerStyle, setCurrentPlayerStyle] = useState<string>('classic');
+  const [customThemes, setCustomThemes] = useState<Theme[]>([]);
 
   useEffect(() => {
     const savedThemeId = localStorage.getItem('themeId');
+    const savedCustomThemes = localStorage.getItem('customThemes');
+    
+    if (savedCustomThemes) {
+      try {
+        const parsed = JSON.parse(savedCustomThemes);
+        setCustomThemes(parsed);
+      } catch (e) {
+        console.error('Failed to load custom themes:', e);
+      }
+    }
+    
     if (savedThemeId) {
-      const theme = themes.find(t => t.id === savedThemeId);
+      const allThemes = [...themes, ...customThemes];
+      const theme = allThemes.find(t => t.id === savedThemeId);
       if (theme) {
         setCurrentTheme(theme);
       }
@@ -421,12 +705,41 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [currentTheme]);
 
   const setTheme = (themeId: string) => {
-    const theme = themes.find(t => t.id === themeId);
+    const allThemes = [...themes, ...customThemes];
+    const theme = allThemes.find(t => t.id === themeId);
     if (theme) {
       setCurrentTheme(theme);
       localStorage.setItem('themeId', themeId);
       // Dispatch custom event to notify components
       window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
+    }
+  };
+
+  const addCustomTheme = (theme: Theme) => {
+    const updatedCustomThemes = [...customThemes, theme];
+    setCustomThemes(updatedCustomThemes);
+    localStorage.setItem('customThemes', JSON.stringify(updatedCustomThemes));
+  };
+
+  const deleteCustomTheme = (themeId: string) => {
+    const updatedCustomThemes = customThemes.filter(t => t.id !== themeId);
+    setCustomThemes(updatedCustomThemes);
+    localStorage.setItem('customThemes', JSON.stringify(updatedCustomThemes));
+    
+    // If deleting current theme, switch to default
+    if (currentTheme.id === themeId) {
+      setTheme(themes[0].id);
+    }
+  };
+
+  const updateCustomTheme = (theme: Theme) => {
+    const updatedCustomThemes = customThemes.map(t => t.id === theme.id ? theme : t);
+    setCustomThemes(updatedCustomThemes);
+    localStorage.setItem('customThemes', JSON.stringify(updatedCustomThemes));
+    
+    // If updating current theme, apply changes
+    if (currentTheme.id === theme.id) {
+      setCurrentTheme(theme);
     }
   };
 
@@ -438,7 +751,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme, themes, playerStyle: currentPlayerStyle, setPlayerStyle, playerStyles }}>
+    <ThemeContext.Provider value={{ 
+      currentTheme, 
+      setTheme, 
+      themes: [...themes, ...customThemes], 
+      playerStyle: currentPlayerStyle, 
+      setPlayerStyle, 
+      playerStyles,
+      customThemes,
+      addCustomTheme,
+      deleteCustomTheme,
+      updateCustomTheme
+    }}>
       {children}
     </ThemeContext.Provider>
   );

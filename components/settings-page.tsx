@@ -4,6 +4,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { IconBrandGithub, IconBrandInstagram, IconCheck } from '@tabler/icons-react';
 import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
+import CustomThemeCreator from './custom-theme-creator';
 
 export default function SettingsPage() {
   const { currentTheme, setTheme, themes, playerStyle, setPlayerStyle, playerStyles } = useTheme();
@@ -63,7 +64,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Instagram Card */}
             <motion.button
-              onClick={() => handleSocialClick('https://instagram.com')}
+              onClick={() => handleSocialClick('https://instagram.com/_gouth.ammmm')}
               className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300"
               style={{
                 backgroundColor: 'var(--bg-card)',
@@ -103,7 +104,7 @@ export default function SettingsPage() {
 
             {/* GitHub Card */}
             <motion.button
-              onClick={() => handleSocialClick('https://github.com')}
+              onClick={() => handleSocialClick('https://github.com/Sword-saint69/maha')}
               className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300"
               style={{
                 backgroundColor: 'var(--bg-card)',
@@ -188,7 +189,7 @@ export default function SettingsPage() {
           <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>
             Player Style
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {playerStyles.map((style) => (
               <motion.button
                 key={style.id}
@@ -198,17 +199,17 @@ export default function SettingsPage() {
                 whileTap={{ scale: 0.98 }}
               >
                 <div
-                  className="rounded-xl p-5 border-2 transition-all duration-300"
+                  className="rounded-xl p-4 border-2 transition-all duration-300 h-full"
                   style={{
                     backgroundColor: 'var(--bg-card)',
                     borderColor: playerStyle === style.id ? 'var(--color-primary)' : 'var(--border-color)',
                   }}
                 >
-                  <div className="mb-3">
-                    <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                  <div className="mb-2">
+                    <h3 className="text-base font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
                       {style.name}
                     </h3>
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
                       {style.description}
                     </p>
                   </div>
@@ -217,10 +218,10 @@ export default function SettingsPage() {
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center"
+                      className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: 'var(--color-primary)' }}
                     >
-                      <IconCheck className="w-5 h-5 text-white" />
+                      <IconCheck className="w-4 h-4 text-white" />
                     </motion.div>
                   )}
                 </div>
@@ -229,12 +230,20 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Custom Theme Creator Section */}
+        <section className="mb-12">
+          <CustomThemeCreator />
+        </section>
+
         {/* Theme Selection Section */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>
-            Theme Customization
+            Preset Themes
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
+            Choose from {themes.length} beautifully crafted themes or create your own custom theme above
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {themes.map((theme) => (
               <motion.button
                 key={theme.id}
@@ -244,25 +253,25 @@ export default function SettingsPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <div
-                  className="rounded-xl p-4 border-2 transition-all duration-300"
+                  className="rounded-xl p-3 border-2 transition-all duration-300"
                   style={{
                     backgroundColor: theme.colors.card,
                     borderColor: currentTheme.id === theme.id ? 'var(--color-primary)' : 'var(--border-color)',
                   }}
                 >
                   {/* Theme Preview */}
-                  <div className="mb-3 space-y-2">
+                  <div className="mb-2 space-y-1.5">
                     <div
-                      className="h-8 rounded-lg"
+                      className="h-6 rounded-md"
                       style={{ backgroundColor: theme.colors.primary }}
                     />
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <div
-                        className="h-4 flex-1 rounded"
+                        className="h-3 flex-1 rounded"
                         style={{ backgroundColor: theme.colors.secondary }}
                       />
                       <div
-                        className="h-4 flex-1 rounded"
+                        className="h-3 flex-1 rounded"
                         style={{ backgroundColor: theme.colors.accent }}
                       />
                     </div>
@@ -271,8 +280,9 @@ export default function SettingsPage() {
                   {/* Theme Name */}
                   <div className="text-center">
                     <p
-                      className="text-sm font-medium"
+                      className="text-xs font-medium truncate"
                       style={{ color: theme.colors.text }}
+                      title={theme.name}
                     >
                       {theme.name}
                     </p>
@@ -283,10 +293,10 @@ export default function SettingsPage() {
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center"
+                      className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: 'var(--color-primary)' }}
                     >
-                      <IconCheck className="w-5 h-5 text-white" />
+                      <IconCheck className="w-3.5 h-3.5 text-white" />
                     </motion.div>
                   )}
                 </div>
