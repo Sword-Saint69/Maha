@@ -3,9 +3,25 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import { IconBrandGithub, IconBrandInstagram, IconCheck } from '@tabler/icons-react';
 import { motion } from 'motion/react';
+import { useState, useEffect } from 'react';
 
 export default function SettingsPage() {
-  const { currentTheme, setTheme, themes } = useTheme();
+  const { currentTheme, setTheme, themes, playerStyle, setPlayerStyle, playerStyles } = useTheme();
+  const [volumeAmplification, setVolumeAmplification] = useState(100);
+
+  useEffect(() => {
+    const savedAmplification = localStorage.getItem('volumeAmplification');
+    if (savedAmplification) {
+      setVolumeAmplification(parseInt(savedAmplification));
+    }
+  }, []);
+
+  const handleVolumeAmplificationChange = (value: number) => {
+    setVolumeAmplification(value);
+    localStorage.setItem('volumeAmplification', value.toString());
+    // Dispatch custom event to notify music player
+    window.dispatchEvent(new CustomEvent('volumeAmplificationChanged', { detail: value }));
+  };
 
   const handleSocialClick = async (url: string) => {
     if (typeof window !== 'undefined' && window.electron && window.electron.openExternal) {
@@ -117,6 +133,99 @@ export default function SettingsPage() {
               </div>
               <div className="absolute inset-0 bg-gray-500 opacity-0 group-hover:opacity-10 transition-opacity" />
             </motion.button>
+          </div>
+        </section>
+
+        {/* Audio Settings Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>
+            Audio Settings
+          </h2>
+          <div
+            className="rounded-2xl p-6"
+            style={{
+              backgroundColor: 'var(--bg-card)',
+              borderColor: 'var(--border-color)',
+            }}
+          >
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between mb-3">
+                  <label className="text-base font-medium" style={{ color: 'var(--text-primary)' }}>
+                    Volume Amplification
+                  </label>
+                  <span className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>
+                    {volumeAmplification}%
+                  </span>
+                </div>
+                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                  Boost audio output beyond normal limits. Use with caution to prevent speaker damage.
+                </p>
+                <input
+                  type="range"
+                  min="50"
+                  max="200"
+                  step="5"
+                  value={volumeAmplification}
+                  onChange={(e) => handleVolumeAmplificationChange(parseInt(e.target.value))}
+                  className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, var(--color-primary) 0%, var(--color-secondary) ${((volumeAmplification - 50) / 150) * 100}%, var(--border-color) ${((volumeAmplification - 50) / 150) * 100}%, var(--border-color) 100%)`,
+                  }}
+                />
+                <div className="flex justify-between mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  <span>50%</span>
+                  <span>100% (Normal)</span>
+                  <span>200%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Player Style Selection Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>
+            Player Style
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {playerStyles.map((style) => (
+              <motion.button
+                key={style.id}
+                onClick={() => setPlayerStyle(style.id)}
+                className="relative group text-left"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div
+                  className="rounded-xl p-5 border-2 transition-all duration-300"
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    borderColor: playerStyle === style.id ? 'var(--color-primary)' : 'var(--border-color)',
+                  }}
+                >
+                  <div className="mb-3">
+                    <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                      {style.name}
+                    </h3>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      {style.description}
+                    </p>
+                  </div>
+                  {/* Active Indicator */}
+                  {playerStyle === style.id && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: 'var(--color-primary)' }}
+                    >
+                      <IconCheck className="w-5 h-5 text-white" />
+                    </motion.div>
+                  )}
+                </div>
+              </motion.button>
+            ))}
           </div>
         </section>
 

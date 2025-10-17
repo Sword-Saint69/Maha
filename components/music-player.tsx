@@ -23,8 +23,28 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [volumeAmplification, setVolumeAmplification] = useState(100);
   const soundRef = useRef<Howl | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Load volume amplification from localStorage
+  useEffect(() => {
+    const savedAmplification = localStorage.getItem('volumeAmplification');
+    if (savedAmplification) {
+      setVolumeAmplification(parseInt(savedAmplification));
+    }
+
+    // Listen for volume amplification changes
+    const handleAmplificationChange = (e: Event) => {
+      const customEvent = e as CustomEvent<number>;
+      setVolumeAmplification(customEvent.detail);
+    };
+
+    window.addEventListener('volumeAmplificationChanged', handleAmplificationChange);
+    return () => {
+      window.removeEventListener('volumeAmplificationChanged', handleAmplificationChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (currentTrack) {
@@ -39,7 +59,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
       const sound = new Howl({
         src: [currentTrack.filePath],
         html5: true,
-        volume: volume,
+        volume: (volume * volumeAmplification) / 100,
         format: ['mp3', 'm4a', 'flac', 'wav', 'ogg', 'aac'],
         onplay: () => {
           console.log('Playing:', currentTrack.title);
@@ -79,7 +99,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
       }
       stopProgressInterval();
     };
-  }, [currentTrack]);
+  }, [currentTrack, volume, volumeAmplification]);
 
   const startProgressInterval = () => {
     stopProgressInterval();
@@ -111,12 +131,22 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (soundRef.current) {
-      soundRef.current.volume(newVolume);
+      // Apply volume amplification
+      const amplifiedVolume = (newVolume * volumeAmplification) / 100;
+      soundRef.current.volume(amplifiedVolume);
     }
     if (newVolume > 0) {
       setIsMuted(false);
     }
   };
+
+  // Update volume when amplification changes
+  useEffect(() => {
+    if (soundRef.current && !isMuted) {
+      const amplifiedVolume = (volume * volumeAmplification) / 100;
+      soundRef.current.volume(amplifiedVolume);
+    }
+  }, [volumeAmplification]);
 
   const toggleMute = () => {
     if (soundRef.current) {

@@ -8,6 +8,7 @@ import {
   useSpring,
 } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export const TracingBeam = ({
   children,
@@ -17,6 +18,7 @@ export const TracingBeam = ({
   className?: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const { currentTheme } = useTheme();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -51,7 +53,7 @@ export const TracingBeam = ({
       ref={ref}
       className={cn("relative mx-auto h-full w-full max-w-4xl", className)}
     >
-      <div className="absolute top-3 -left-4 md:-left-20">
+      <div className="absolute top-3 -right-4 md:-right-20">
         <motion.div
           transition={{
             duration: 0.2,
@@ -63,7 +65,7 @@ export const TracingBeam = ({
                 ? "none"
                 : "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
-          className="border-netural-200 ml-[27px] flex h-4 w-4 items-center justify-center rounded-full border shadow-sm"
+          className="border-netural-200 mr-[27px] flex h-4 w-4 items-center justify-center rounded-full border shadow-sm"
         >
           <motion.div
             transition={{
@@ -71,32 +73,33 @@ export const TracingBeam = ({
               delay: 0.5,
             }}
             animate={{
-              backgroundColor: scrollYProgress.get() > 0 ? "white" : "#8b5cf6",
-              borderColor: scrollYProgress.get() > 0 ? "white" : "#7c3aed",
+              backgroundColor: scrollYProgress.get() > 0 ? currentTheme.colors.primary : currentTheme.colors.accent,
+              borderColor: scrollYProgress.get() > 0 ? currentTheme.colors.primary : currentTheme.colors.secondary,
             }}
-            className="h-2 w-2 rounded-full border border-neutral-300 bg-white"
+            className="h-2 w-2 rounded-full border"
+            style={{ borderColor: currentTheme.colors.border }}
           />
         </motion.div>
         <svg
           viewBox={`0 0 20 ${svgHeight}`}
           width="20"
           height={svgHeight} // Set the SVG height
-          className="ml-4 block"
+          className="mr-4 block"
           aria-hidden="true"
         >
           <motion.path
-            d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
+            d={`M 19 0V -36 l -18 24 V ${svgHeight * 0.8} l 18 24V ${svgHeight}`}
             fill="none"
-            stroke="#9091A0"
+            stroke={currentTheme.colors.border}
             strokeOpacity="0.16"
             transition={{
               duration: 10,
             }}
           ></motion.path>
           <motion.path
-            d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
+            d={`M 19 0V -36 l -18 24 V ${svgHeight * 0.8} l 18 24V ${svgHeight}`}
             fill="none"
-            stroke="url(#gradient)"
+            stroke={`url(#gradient-${currentTheme.id})`}
             strokeWidth="1.25"
             className="motion-reduce:hidden"
             transition={{
@@ -105,17 +108,17 @@ export const TracingBeam = ({
           ></motion.path>
           <defs>
             <motion.linearGradient
-              id="gradient"
+              id={`gradient-${currentTheme.id}`}
               gradientUnits="userSpaceOnUse"
               x1="0"
               x2="0"
               y1={y1} // set y1 for gradient
               y2={y2} // set y2 for gradient
             >
-              <stop stopColor="#8b5cf6" stopOpacity="0"></stop>
-              <stop stopColor="#8b5cf6"></stop>
-              <stop offset="0.325" stopColor="#a78bfa"></stop>
-              <stop offset="1" stopColor="#c4b5fd" stopOpacity="0"></stop>
+              <stop stopColor={currentTheme.colors.primary} stopOpacity="0"></stop>
+              <stop stopColor={currentTheme.colors.primary}></stop>
+              <stop offset="0.325" stopColor={currentTheme.colors.accent}></stop>
+              <stop offset="1" stopColor={currentTheme.colors.secondary} stopOpacity="0"></stop>
             </motion.linearGradient>
           </defs>
         </svg>

@@ -19,6 +19,12 @@ export interface Theme {
   };
 }
 
+export interface PlayerStyle {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export const themes: Theme[] = [
   {
     id: 'midnight',
@@ -180,18 +186,210 @@ export const themes: Theme[] = [
       border: '#6272a4',
     },
   },
+  {
+    id: 'matrix',
+    name: 'Matrix',
+    colors: {
+      background: '#0d0208',
+      foreground: '#1a1a1a',
+      primary: '#00ff41',
+      secondary: '#008f11',
+      accent: '#39ff14',
+      card: '#1a1a1a',
+      cardHover: '#262626',
+      text: '#00ff41',
+      textSecondary: '#008f11',
+      border: '#003b00',
+    },
+  },
+  {
+    id: 'sakura',
+    name: 'Sakura Pink',
+    colors: {
+      background: '#1a0a12',
+      foreground: '#2d1420',
+      primary: '#ff66d8',
+      secondary: '#ff1493',
+      accent: '#ffb3e6',
+      card: '#3d1f2e',
+      cardHover: '#4d2a3a',
+      text: '#ffe6f7',
+      textSecondary: '#ffcce6',
+      border: '#993366',
+    },
+  },
+  {
+    id: 'tokyo',
+    name: 'Tokyo Night',
+    colors: {
+      background: '#1a1b26',
+      foreground: '#24283b',
+      primary: '#7aa2f7',
+      secondary: '#bb9af7',
+      accent: '#7dcfff',
+      card: '#24283b',
+      cardHover: '#414868',
+      text: '#c0caf5',
+      textSecondary: '#9aa5ce',
+      border: '#565f89',
+    },
+  },
+  {
+    id: 'vampire',
+    name: 'Vampire',
+    colors: {
+      background: '#1c0a0a',
+      foreground: '#2d1414',
+      primary: '#ff3333',
+      secondary: '#cc0000',
+      accent: '#ff6666',
+      card: '#331a1a',
+      cardHover: '#4d1f1f',
+      text: '#fff0f0',
+      textSecondary: '#ffcccc',
+      border: '#660000',
+    },
+  },
+  {
+    id: 'aurora',
+    name: 'Aurora',
+    colors: {
+      background: '#0a1628',
+      foreground: '#152238',
+      primary: '#00d4aa',
+      secondary: '#00b4d8',
+      accent: '#90e0ef',
+      card: '#1e3a5f',
+      cardHover: '#2a5080',
+      text: '#caf0f8',
+      textSecondary: '#90e0ef',
+      border: '#48cae4',
+    },
+  },
+  {
+    id: 'ember',
+    name: 'Ember',
+    colors: {
+      background: '#1a0c00',
+      foreground: '#2d1a0d',
+      primary: '#ff6b35',
+      secondary: '#ff4500',
+      accent: '#ff8c42',
+      card: '#3d2817',
+      cardHover: '#4d3521',
+      text: '#fff5f0',
+      textSecondary: '#ffd7c4',
+      border: '#a0522d',
+    },
+  },
+  {
+    id: 'grape',
+    name: 'Grape Soda',
+    colors: {
+      background: '#120a1f',
+      foreground: '#1e1333',
+      primary: '#9d4edd',
+      secondary: '#7209b7',
+      accent: '#c77dff',
+      card: '#3c096c',
+      cardHover: '#5a189a',
+      text: '#f0e6ff',
+      textSecondary: '#e0aaff',
+      border: '#6a0dad',
+    },
+  },
+  {
+    id: 'arctic',
+    name: 'Arctic Ice',
+    colors: {
+      background: '#0a1f1f',
+      foreground: '#153333',
+      primary: '#4dd4e8',
+      secondary: '#00b4cc',
+      accent: '#80e5f5',
+      card: '#1f4d4d',
+      cardHover: '#2d6666',
+      text: '#e6ffff',
+      textSecondary: '#b3f0ff',
+      border: '#006680',
+    },
+  },
+  {
+    id: 'coffee',
+    name: 'Coffee Break',
+    colors: {
+      background: '#1a120a',
+      foreground: '#2d1f14',
+      primary: '#d4a574',
+      secondary: '#a0724a',
+      accent: '#e6c9a8',
+      card: '#3d2f1f',
+      cardHover: '#4d3a27',
+      text: '#fff8f0',
+      textSecondary: '#e6d4c4',
+      border: '#6b4423',
+    },
+  },
+  {
+    id: 'midnight-blue',
+    name: 'Midnight Blue',
+    colors: {
+      background: '#0a0e27',
+      foreground: '#14183d',
+      primary: '#5865f2',
+      secondary: '#4752c4',
+      accent: '#7289da',
+      card: '#1e2449',
+      cardHover: '#2c3464',
+      text: '#ffffff',
+      textSecondary: '#b9bbbe',
+      border: '#3c4270',
+    },
+  },
+];
+
+export const playerStyles: PlayerStyle[] = [
+  {
+    id: 'classic',
+    name: 'Classic',
+    description: 'Traditional music player layout with gradient effects'
+  },
+  {
+    id: 'minimal',
+    name: 'Minimal',
+    description: 'Clean and simple design with essential controls only'
+  },
+  {
+    id: 'compact',
+    name: 'Compact',
+    description: 'Space-saving design perfect for small screens'
+  },
+  {
+    id: 'expanded',
+    name: 'Expanded',
+    description: 'Full-featured player with large album art and lyrics'
+  },
+  {
+    id: 'glassmorphism',
+    name: 'Glassmorphism',
+    description: 'Modern frosted glass effect with vibrant colors'
+  },
 ];
 
 interface ThemeContextType {
   currentTheme: Theme;
   setTheme: (themeId: string) => void;
   themes: Theme[];
+  playerStyle: string;
+  setPlayerStyle: (styleId: string) => void;
+  playerStyles: PlayerStyle[];
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<Theme>(themes[0]);
+  const [currentPlayerStyle, setCurrentPlayerStyle] = useState<string>('classic');
 
   useEffect(() => {
     const savedThemeId = localStorage.getItem('themeId');
@@ -200,6 +398,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (theme) {
         setCurrentTheme(theme);
       }
+    }
+    
+    const savedPlayerStyle = localStorage.getItem('playerStyle');
+    if (savedPlayerStyle) {
+      setCurrentPlayerStyle(savedPlayerStyle);
     }
   }, []);
 
@@ -222,11 +425,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (theme) {
       setCurrentTheme(theme);
       localStorage.setItem('themeId', themeId);
+      // Dispatch custom event to notify components
+      window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
     }
   };
 
+  const setPlayerStyle = (styleId: string) => {
+    setCurrentPlayerStyle(styleId);
+    localStorage.setItem('playerStyle', styleId);
+    // Dispatch custom event to notify components
+    window.dispatchEvent(new CustomEvent('playerStyleChanged', { detail: styleId }));
+  };
+
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme, themes }}>
+    <ThemeContext.Provider value={{ currentTheme, setTheme, themes, playerStyle: currentPlayerStyle, setPlayerStyle, playerStyles }}>
       {children}
     </ThemeContext.Provider>
   );
