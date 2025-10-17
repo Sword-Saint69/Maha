@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, protocol } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 const mm = require('music-metadata');
@@ -17,6 +17,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false, // Allow loading local files
     },
     titleBarStyle: 'hiddenInset', // For macOS styled title bar
     backgroundColor: '#000000',
@@ -46,6 +47,17 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Register custom protocol for serving local audio files
+  protocol.registerFileProtocol('media-file', (request, callback) => {
+    const url = request.url.replace('media-file://', '');
+    try {
+      return callback(decodeURIComponent(url));
+    } catch (error) {
+      console.error('Error serving media file:', error);
+      return callback({ error: -2 });
+    }
+  });
+
   createWindow();
 
   // IPC Handlers
@@ -65,8 +77,10 @@ app.whenReady().then(() => {
   // Scan music folder and extract metadata
   ipcMain.handle('music:scanFolder', async (event, folderPath) => {
     try {
+      console.log('Scanning folder:', folderPath);
       const musicFiles = [];
       const files = await fs.readdir(folderPath);
+      console.log(`Found ${files.length} files in folder`);
       
       const supportedFormats = ['.mp3', '.m4a', '.flac', '.wav', '.ogg', '.aac'];
       
@@ -78,6 +92,7 @@ app.whenReady().then(() => {
           try {
             const stats = await fs.stat(filePath);
             if (stats.isFile()) {
+              console.log(`Processing: ${file}`);
               const metadata = await mm.parseFile(filePath);
               const coverArt = metadata.common.picture && metadata.common.picture[0]
                 ? `data:${metadata.common.picture[0].format};base64,${metadata.common.picture[0].data.toString('base64')}`
@@ -88,17 +103,18 @@ app.whenReady().then(() => {
                 artist: metadata.common.artist || 'Unknown Artist',
                 album: metadata.common.album || 'Unknown Album',
                 duration: metadata.format.duration || 0,
-                filePath: filePath,
+                filePath: `media-file://${filePath}`,
                 coverArt: coverArt,
                 year: metadata.common.year || null,
               });
             }
           } catch (error) {
-            console.error(`Error reading metadata for ${file}:`, error);
+            console.error(`Error reading metadata for ${file}:`, error.message);
           }
         }
       }
       
+      console.log(`Successfully processed ${musicFiles.length} music files`);
       return { success: true, files: musicFiles };
     } catch (error) {
       console.error('Error scanning folder:', error);
