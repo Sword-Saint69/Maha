@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Howl } from "howler";
 import type { MusicFile } from "@/electron/electron.d";
 import { StatsManager } from "@/lib/music-library";
+import Equalizer from "./equalizer";
 import {
   IconPlayerPlay,
   IconPlayerPause,
@@ -11,6 +12,7 @@ import {
   IconPlayerSkipBack,
   IconVolume,
   IconVolumeOff,
+  IconGauge,
 } from "@tabler/icons-react";
 
 interface MusicPlayerProps {
@@ -25,6 +27,8 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [volumeAmplification, setVolumeAmplification] = useState(100);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
+  const [showSpeedControl, setShowSpeedControl] = useState(false);
   const soundRef = useRef<Howl | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -33,6 +37,11 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
     const savedAmplification = localStorage.getItem('volumeAmplification');
     if (savedAmplification) {
       setVolumeAmplification(parseInt(savedAmplification));
+    }
+
+    const savedSpeed = localStorage.getItem('playbackSpeed');
+    if (savedSpeed) {
+      setPlaybackSpeed(parseFloat(savedSpeed));
     }
 
     // Listen for volume amplification changes
@@ -61,6 +70,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
         src: [currentTrack.filePath],
         html5: true,
         volume: (volume * volumeAmplification) / 100,
+        rate: playbackSpeed,
         format: ['mp3', 'm4a', 'flac', 'wav', 'ogg', 'aac'],
         onplay: () => {
           console.log('Playing:', currentTrack.title);
@@ -102,7 +112,7 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
       }
       stopProgressInterval();
     };
-  }, [currentTrack, volume, volumeAmplification]);
+  }, [currentTrack, volume, volumeAmplification, playbackSpeed]);
 
   const startProgressInterval = () => {
     stopProgressInterval();
@@ -166,6 +176,14 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
       const newTime = percent * currentTrack.duration;
       soundRef.current.seek(newTime);
       setCurrentTime(newTime);
+    }
+  };
+
+  const handleSpeedChange = (speed: number) => {
+    setPlaybackSpeed(speed);
+    localStorage.setItem('playbackSpeed', speed.toString());
+    if (soundRef.current) {
+      soundRef.current.rate(speed);
     }
   };
 
@@ -291,6 +309,69 @@ export default function MusicPlayer({ currentTrack, onNext, onPrevious }: MusicP
           <span className="text-xs font-medium text-neutral-500 w-8 tabular-nums">
             {Math.round((isMuted ? 0 : volume) * 100)}%
           </span>
+        </div>
+
+        {/* Speed Control & Equalizer */}
+        <div className="flex items-center gap-2">
+          {/* Playback Speed Control */}
+          <div className="relative">
+            <button
+              onClick={() => setShowSpeedControl(!showSpeedControl)}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
+              style={{
+                backgroundColor: playbackSpeed !== 1.0 ? 'var(--color-primary)' : 'var(--bg-secondary)',
+                color: playbackSpeed !== 1.0 ? 'white' : 'var(--text-primary)',
+              }}
+              title="Playback Speed"
+            >
+              <IconGauge className="w-4 h-4" />
+              <span>{playbackSpeed.toFixed(1)}x</span>
+            </button>
+            {showSpeedControl && (
+              <div
+                className="absolute bottom-full right-0 mb-2 p-3 rounded-lg shadow-xl border z-50"
+                style={{
+                  backgroundColor: 'var(--bg-card)',
+                  borderColor: 'var(--border-color)',
+                  width: '180px',
+                }}
+              >
+                <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+                  Playback Speed
+                </p>
+                <div className="grid grid-cols-3 gap-1.5 mb-2">
+                  {[0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map((speed) => (
+                    <button
+                      key={speed}
+                      onClick={() => {
+                        handleSpeedChange(speed);
+                        setShowSpeedControl(false);
+                      }}
+                      className="px-2 py-1 rounded text-xs font-medium transition-all"
+                      style={{
+                        backgroundColor: playbackSpeed === speed ? 'var(--color-primary)' : 'var(--bg-secondary)',
+                        color: playbackSpeed === speed ? 'white' : 'var(--text-primary)',
+                      }}
+                    >
+                      {speed}x
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="range"
+                  min="0.25"
+                  max="2.0"
+                  step="0.05"
+                  value={playbackSpeed}
+                  onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
+                  className="w-full h-1.5 bg-neutral-700/50 rounded-full appearance-none cursor-pointer"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Equalizer */}
+          <Equalizer />
         </div>
       </div>
     </div>
