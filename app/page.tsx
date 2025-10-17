@@ -15,7 +15,6 @@ import {
   IconSettings,
   IconHome,
   IconFolder,
-  IconTerminal2,
 } from "@tabler/icons-react";
 
 export default function Home() {
@@ -164,13 +163,6 @@ export default function Home() {
       ),
       href: "#",
       onClick: () => setCurrentView('home'),
-    },
-    {
-      title: "Products",
-      icon: (
-        <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "#",
     },
     {
       title: "Music Folder",
