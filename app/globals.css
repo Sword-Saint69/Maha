@@ -75,6 +75,18 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Theme System Variables */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --color-primary: #8b5cf6;
+  --color-secondary: #6d28d9;
+  --color-accent: #a78bfa;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #262626;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --border-color: #404040;
 }
 
 .dark {

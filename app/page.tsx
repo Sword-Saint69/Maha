@@ -3,14 +3,16 @@
 import { FloatingDock } from "@/components/ui/floating-dock";
 import MusicCardGrid from "@/components/music-card-grid";
 import MusicPlayer from "@/components/music-player";
+import SettingsPage from "@/components/settings-page";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useState, useEffect } from "react";
 import type { MusicFile } from "@/electron/electron.d";
 import {
   IconBrandGithub,
-  IconBrandX,
-  IconExchange,
+  IconBrandInstagram,
+  IconSettings,
   IconHome,
   IconFolder,
   IconTerminal2,
@@ -23,6 +25,7 @@ export default function Home() {
   const [currentTrack, setCurrentTrack] = useState<MusicFile | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentView, setCurrentView] = useState<'home' | 'settings'>('home');
 
   // Load music files from localStorage on mount
   useEffect(() => {
@@ -132,6 +135,19 @@ export default function Home() {
     setCurrentTrackIndex(prevIndex);
   };
 
+  const handleSocialClick = async (url: string) => {
+    if (typeof window !== 'undefined' && window.electron && window.electron.openExternal) {
+      try {
+        await window.electron.openExternal(url);
+      } catch (error) {
+        console.error('Error opening external URL:', error);
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   const searchPlaceholders = [
     "Search for songs...",
     "Find your favorite artist...",
@@ -147,6 +163,7 @@ export default function Home() {
         <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
+      onClick: () => setCurrentView('home'),
     },
     {
       title: "Products",
@@ -164,18 +181,20 @@ export default function Home() {
       onClick: handleMusicFolderSelect,
     },
     {
-      title: "Changelog",
+      title: "Settings",
       icon: (
-        <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconSettings className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
+      onClick: () => setCurrentView('settings'),
     },
     {
-      title: "Twitter",
+      title: "Instagram",
       icon: (
-        <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconBrandInstagram className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
+      onClick: () => handleSocialClick('https://instagram.com'),
     },
     {
       title: "GitHub",
@@ -183,49 +202,58 @@ export default function Home() {
         <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
+      onClick: () => handleSocialClick('https://github.com'),
     },
   ];
 
   return (
-    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32">
-      <div className="absolute top-6 left-28 w-48 h-20 z-10">
-        <TextHoverEffect text="MAHA" />
-      </div>
-      
-      <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
-        <PlaceholdersAndVanishInput
-          placeholders={searchPlaceholders}
-          onChange={handleSearchChange}
-          onSubmit={handleSearchSubmit}
+    <ThemeProvider>
+      <div className="relative min-h-screen text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32" style={{ backgroundColor: 'var(--bg-primary)' }}>
+        <div className="absolute top-6 left-28 w-48 h-20 z-10">
+          <TextHoverEffect text="MAHA" />
+        </div>
+        
+        {currentView === 'home' ? (
+          <>
+            <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
+              <PlaceholdersAndVanishInput
+                placeholders={searchPlaceholders}
+                onChange={handleSearchChange}
+                onSubmit={handleSearchSubmit}
+              />
+            </div>
+            
+            <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
+              {isLoading ? (
+                <div className="text-center py-20">
+                  <div className="inline-flex items-center gap-3">
+                    <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                    <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {searchQuery && (
+                    <div className="mb-4 text-sm text-neutral-400">
+                      {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
+                    </div>
+                  )}
+                  <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
+                </>
+              )}
+            </div>
+          </>
+        ) : (
+          <SettingsPage />
+        )}
+        
+        <FloatingDock items={links} />
+        <MusicPlayer 
+          currentTrack={currentTrack} 
+          onNext={handleNext}
+          onPrevious={handlePrevious}
         />
       </div>
-      
-      <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
-        {isLoading ? (
-          <div className="text-center py-20">
-            <div className="inline-flex items-center gap-3">
-              <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-              <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
-            </div>
-          </div>
-        ) : (
-          <>
-            {searchQuery && (
-              <div className="mb-4 text-sm text-neutral-400">
-                {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
-              </div>
-            )}
-            <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
-          </>
-        )}
-      </div>
-      
-      <FloatingDock items={links} />
-      <MusicPlayer 
-        currentTrack={currentTrack} 
-        onNext={handleNext}
-        onPrevious={handlePrevious}
-      />
-    </div>
+    </ThemeProvider>
   );
 }
