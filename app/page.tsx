@@ -57,7 +57,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-indigo-900 text-white flex flex-col items-center justify-center p-8">
+    <div className="relative min-h-screen bg-gradient-to-br from-purple-900 via-black to-indigo-900 text-white flex flex-col items-center justify-center p-8">
       <div className="text-center mb-16">
         <h1 className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
           Maha Music Player
@@ -66,7 +66,7 @@ export default function Home() {
           Your personal music experience
         </p>
       </div>
-      <div className="flex items-center justify-center w-full">
+      <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center pb-8">
         <FloatingDock items={links} />
       </div>
     </div>
