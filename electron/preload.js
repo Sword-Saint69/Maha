@@ -28,4 +28,6 @@ contextBridge.exposeInMainWorld('electron', {
     setVolume: (volume) => ipcRenderer.invoke('player:setVolume', volume),
     loadFile: () => ipcRenderer.invoke('dialog:openFile'),
   },
+  // Music folder selection
+  selectMusicFolder: () => ipcRenderer.invoke('dialog:openMusicFolder'),
 });

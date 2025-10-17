@@ -8,6 +8,7 @@ export interface ElectronAPI {
     setVolume: (volume: number) => Promise<void>;
     loadFile: () => Promise<string | null>;
   };
+  selectMusicFolder: () => Promise<{ success: boolean; path: string | null }>;
 }
 
 declare global {

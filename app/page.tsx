@@ -8,11 +8,32 @@ import {
   IconBrandX,
   IconExchange,
   IconHome,
-  IconNewSection,
+  IconFolder,
   IconTerminal2,
 } from "@tabler/icons-react";
 
 export default function Home() {
+  const handleMusicFolderSelect = async () => {
+    // Check if running in Electron environment
+    if (typeof window !== 'undefined' && window.electron) {
+      try {
+        const result = await window.electron.selectMusicFolder();
+        if (result.success && result.path) {
+          console.log('Selected music folder:', result.path);
+          // Store the folder path for future use
+          localStorage.setItem('musicFolderPath', result.path);
+          // TODO: Scan folder for music files and update library
+          alert(`Music folder selected: ${result.path}`);
+        }
+      } catch (error) {
+        console.error('Error selecting music folder:', error);
+      }
+    } else {
+      // Fallback for web browser (development)
+      alert('Folder selection is only available in the Electron app');
+    }
+  };
+
   const links = [
     {
       title: "Home",
@@ -29,11 +50,12 @@ export default function Home() {
       href: "#",
     },
     {
-      title: "Components",
+      title: "Music Folder",
       icon: (
-        <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconFolder className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "#",
+      onClick: handleMusicFolderSelect,
     },
     {
       title: "Changelog",
@@ -79,7 +101,7 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-start pt-16">
       <div className="absolute top-4 left-4 w-48 h-24">
-        <TextHoverEffect text="Maha" />
+        <TextHoverEffect text="MAHA" />
       </div>
       <div className="mt-8">
         <Carousel slides={carouselSlides} />

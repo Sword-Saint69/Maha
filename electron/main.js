@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -45,6 +45,20 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow();
+
+  // IPC Handlers
+  ipcMain.handle('dialog:openMusicFolder', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openDirectory'],
+      title: 'Select Music Folder',
+      buttonLabel: 'Select Folder',
+    });
+
+    if (!result.canceled && result.filePaths.length > 0) {
+      return { success: true, path: result.filePaths[0] };
+    }
+    return { success: false, path: null };
+  });
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
