@@ -201,22 +201,6 @@ export default function Home() {
       href: "#",
       onClick: () => setCurrentView('settings'),
     },
-    {
-      title: "Instagram",
-      icon: (
-        <IconBrandInstagram className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "#",
-      onClick: () => handleSocialClick('https://instagram.com/_gouth.ammmm'),
-    },
-    {
-      title: "GitHub",
-      icon: (
-        <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "#",
-      onClick: () => handleSocialClick('https://github.com/Sword-saint69'),
-    },
   ];
 
   return (
