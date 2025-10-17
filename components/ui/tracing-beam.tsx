@@ -21,27 +21,50 @@ export const TracingBeam = ({
   const { currentTheme } = useTheme();
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   });
 
   const contentRef = useRef<HTMLDivElement>(null);
   const [svgHeight, setSvgHeight] = useState(0);
 
   useEffect(() => {
+    const updateHeight = () => {
+      if (contentRef.current) {
+        setSvgHeight(contentRef.current.offsetHeight);
+      }
+    };
+
+    // Initial height calculation
+    updateHeight();
+
+    // Update height on window resize
+    window.addEventListener('resize', updateHeight);
+
+    // Use ResizeObserver to detect content size changes
+    const resizeObserver = new ResizeObserver(updateHeight);
     if (contentRef.current) {
-      setSvgHeight(contentRef.current.offsetHeight);
+      resizeObserver.observe(contentRef.current);
     }
-  }, []);
+
+    // Update height after a short delay to catch any dynamic content
+    const timeoutId = setTimeout(updateHeight, 100);
+
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      resizeObserver.disconnect();
+      clearTimeout(timeoutId);
+    };
+  }, [children]);
 
   const y1 = useSpring(
-    useTransform(scrollYProgress, [0, 0.8], [50, svgHeight]),
+    useTransform(scrollYProgress, [0, 0.8], [50, Math.max(svgHeight, 1000)]),
     {
       stiffness: 500,
       damping: 90,
     },
   );
   const y2 = useSpring(
-    useTransform(scrollYProgress, [0, 1], [50, svgHeight - 200]),
+    useTransform(scrollYProgress, [0, 1], [50, Math.max(svgHeight - 200, 800)]),
     {
       stiffness: 500,
       damping: 90,
@@ -81,14 +104,15 @@ export const TracingBeam = ({
           />
         </motion.div>
         <svg
-          viewBox={`0 0 20 ${svgHeight}`}
+          viewBox={`0 0 20 ${Math.max(svgHeight, 1000)}`}
           width="20"
-          height={svgHeight} // Set the SVG height
+          height={Math.max(svgHeight, 1000)} // Set the SVG height with minimum
           className="mr-4 block"
           aria-hidden="true"
+          style={{ minHeight: '100vh' }}
         >
           <motion.path
-            d={`M 19 0V -36 l -18 24 V ${svgHeight * 0.8} l 18 24V ${svgHeight}`}
+            d={`M 19 0V -36 l -18 24 V ${Math.max(svgHeight, 1000) * 0.8} l 18 24V ${Math.max(svgHeight, 1000)}`}
             fill="none"
             stroke={currentTheme.colors.border}
             strokeOpacity="0.16"
@@ -97,7 +121,7 @@ export const TracingBeam = ({
             }}
           ></motion.path>
           <motion.path
-            d={`M 19 0V -36 l -18 24 V ${svgHeight * 0.8} l 18 24V ${svgHeight}`}
+            d={`M 19 0V -36 l -18 24 V ${Math.max(svgHeight, 1000) * 0.8} l 18 24V ${Math.max(svgHeight, 1000)}`}
             fill="none"
             stroke={`url(#gradient-${currentTheme.id})`}
             strokeWidth="1.25"

@@ -25,36 +25,32 @@ A powerful audio enhancement feature that allows you to boost volume beyond the 
 
 ---
 
-## 🎨 Player Styles
+## 🎨 Player Styles (20 Unique Styles!)
 
-Customize the look and feel of your music player with 5 unique styles!
+Customize the look and feel of your music player with 20 unique styles!
 
 ### Available Styles:
 
-1. **Classic** (Default)
-   - Traditional music player layout
-   - Gradient effects
-   - Purple-pink color scheme
-
-2. **Minimal**
-   - Clean and simple design
-   - Essential controls only
-   - Perfect for distraction-free listening
-
-3. **Compact**
-   - Space-saving design
-   - Ideal for small screens
-   - Optimized layout
-
-4. **Expanded**
-   - Full-featured player
-   - Large album art
-   - Lyrics support (coming soon)
-
-5. **Glassmorphism**
-   - Modern frosted glass effect
-   - Vibrant colors
-   - Stunning visual appeal
+1. **Classic** - Traditional music player layout with gradient effects
+2. **Minimal** - Clean and simple design with essential controls only
+3. **Compact** - Space-saving design perfect for small screens
+4. **Expanded** - Full-featured player with large album art and lyrics
+5. **Glassmorphism** - Modern frosted glass effect with vibrant colors
+6. **Neon Glow** - Vibrant neon lights with glowing effects
+7. **Retro Wave** - 80s inspired synthwave aesthetic
+8. **Material Design** - Google Material Design principles
+9. **Neumorphism** - Soft shadows and subtle depth effects
+10. **Brutalist** - Bold, raw, and unapologetic design
+11. **Vinyl Record** - Classic vinyl player experience
+12. **Futuristic** - Sci-fi inspired interface
+13. **Minimalist Pro** - Ultra-clean professional interface
+14. **Ambient** - Soft, calming, atmospheric design
+15. **Disco Ball** - Party-ready with sparkle effects
+16. **Terminal** - Hacker-style command line aesthetic
+17. **Aqua Waves** - Flowing water-inspired animations
+18. **Cosmic** - Space-themed with stars and nebula
+19. **Paper Texture** - Natural paper-like material design
+20. **Holographic** - Iridescent rainbow shimmer effects
 
 ### How to change:
 1. Go to Settings
@@ -64,31 +60,30 @@ Customize the look and feel of your music player with 5 unique styles!
 
 ---
 
-## 🌈 Enhanced Themes
+## 🌈 Enhanced Themes (33 Beautiful Themes!)
 
-The app now includes **20 beautiful themes** to choose from!
+The app now includes **33 stunning themes** to choose from!
 
-### New Themes Added:
-- Midnight Dark
-- Ocean Blue
-- Forest Green
-- Sunset Orange
-- Lavender Dream
-- Rose Gold
-- Cyber Punk
-- Nordic Night
-- Monokai
-- Dracula
-- Matrix
-- Sakura Pink
-- Tokyo Night
-- Vampire
-- Aurora
-- Ember
-- Grape Soda
-- Arctic Ice
-- Coffee Break
-- Midnight Blue
+### Preset Themes (20):
+- Midnight Dark, Ocean Blue, Forest Green, Sunset Orange
+- Lavender Dream, Rose Gold, Cyber Punk, Nordic Night
+- Monokai, Dracula, Matrix, Sakura Pink
+- Tokyo Night, Vampire, Aurora, Ember
+- Grape Soda, Arctic Ice, Coffee Break, Midnight Blue
+
+### NEW Themes (13):
+- **Mint Fresh** - Cool mint green tones
+- **Coral Reef** - Vibrant coral pink shades
+- **Golden Hour** - Warm golden yellow hues
+- **Amethyst** - Elegant purple gemstone colors
+- **Neon Green** - Electric lime green accents
+- **Royal Purple** - Majestic deep purple
+- **Turquoise Dream** - Calming turquoise blues
+- **Crimson Night** - Deep red crimson tones
+- **Lime Electric** - Bright lime yellow-green
+- **Indigo Depths** - Deep indigo blue shades
+- **Peach Sunset** - Soft peach orange colors
+- **Steel Gray** - Modern metallic gray tones
 
 ### Theme Features:
 - Custom color palettes for each theme
@@ -96,21 +91,100 @@ The app now includes **20 beautiful themes** to choose from!
 - Saved automatically
 - Preview before applying
 - Theme-aware components
+- **NEW:** Create unlimited custom themes!
+
+---
+
+## 🎨 Custom Theme Creator (NEW!)
+
+Create your own personalized themes with the advanced color picker interface!
+
+### Color Picker Features:
+
+#### 1. **Primary Color Selector**
+- Main accent color for buttons and highlights
+- Visual color picker with hex input
+- 42+ preset colors
+- Live preview
+
+#### 2. **Secondary Color Selector**
+- Supporting accent color
+- Complements primary color
+- Full color spectrum
+
+#### 3. **Accent Color Selector**
+- Additional highlight color
+- For special elements
+- Creates visual harmony
+
+#### 4. **Background Colors**
+- **Main Background** - Primary app background
+- **Foreground** - Secondary background layer
+- **Card Background** - Panel and card backgrounds
+- **Card Hover** - Interactive hover states
+
+#### 5. **Text Colors**
+- **Primary Text** - Main readable text
+- **Secondary Text** - Muted text for descriptions
+- Perfect contrast ratios
+
+#### 6. **Border Color**
+- Dividers and outlines
+- Subtle separation elements
+
+### How to Create a Custom Theme:
+
+1. **Open Settings** → Navigate to "Custom Themes" section
+2. **Click "Create Theme"** button
+3. **Name Your Theme** - Enter a unique name
+4. **Choose Colors**:
+   - Click on any color box to open picker
+   - Use the color wheel for custom colors
+   - Enter hex codes directly (#000000)
+   - Select from 42+ preset colors
+5. **Preview in Real-time** - See your theme instantly
+6. **Save & Apply** - Click "Create Theme" button
+
+### Managing Custom Themes:
+
+- **Apply** - Instantly switch to your custom theme
+- **Edit** - Modify existing custom themes
+- **Delete** - Remove unwanted themes
+- **Export/Import** - Coming soon!
+
+### Technical Features:
+- Stored in localStorage
+- Unlimited custom themes
+- Real-time preview
+- Edit existing themes
+- Delete with confirmation
+- Persists across sessions
 
 ---
 
 ## 🎯 Tracing Beam Enhancement
 
-The decorative tracing beam has been upgraded!
+The decorative tracing beam has been significantly upgraded!
 
 ### Improvements:
-- **Position**: Moved to the right side for better aesthetics
-- **Theme Integration**: Colors now match the selected theme
+- **Position**: Positioned on the right side
+- **Theme Integration**: Colors match the selected theme dynamically
 - **Dynamic Colors**: 
   - Primary color for main gradient
   - Accent color for highlights
   - Secondary color for fade effects
-- **Border Colors**: Uses theme border colors
+  - Border colors from theme
+- **Scroll Tracking**: Now properly tracks entire page length
+- **Responsive Height**: Automatically adjusts to content
+- **Performance**: Uses ResizeObserver for efficient updates
+
+### Recent Fixes:
+- ✅ Extended beam length to cover entire scrollable area
+- ✅ Dynamic height calculation on content changes
+- ✅ Minimum height ensures visibility
+- ✅ Better scroll offset tracking ("start start" to "end end")
+- ✅ ResizeObserver for content size changes
+- ✅ Window resize handling
 
 ---
 

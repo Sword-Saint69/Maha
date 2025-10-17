@@ -7,6 +7,7 @@ import SettingsPage from "@/components/settings-page";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useState, useEffect } from "react";
 import type { MusicFile } from "@/electron/electron.d";
@@ -210,45 +211,47 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      <div className="relative min-h-screen text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <div className="relative min-h-screen text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32" style={{ backgroundColor: 'var(--bg-primary)', minHeight: '100vh' }}>
         <div className="absolute top-6 left-28 w-48 h-20 z-10">
           <TextHoverEffect text="MAHA" />
         </div>
         
-        <TracingBeam className="px-6">
-          {currentView === 'home' ? (
-            <>
-              <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
-                <PlaceholdersAndVanishInput
-                  placeholders={searchPlaceholders}
-                  onChange={handleSearchChange}
-                  onSubmit={handleSearchSubmit}
-                />
-              </div>
-              
-              <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
-                {isLoading ? (
-                  <div className="text-center py-20">
-                    <div className="inline-flex items-center gap-3">
-                      <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-                      <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
-                    </div>
+        {currentView === 'home' ? (
+          <>
+            <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
+              <PlaceholdersAndVanishInput
+                placeholders={searchPlaceholders}
+                onChange={handleSearchChange}
+                onSubmit={handleSearchSubmit}
+              />
+            </div>
+            
+            <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
+              {isLoading ? (
+                <div className="text-center py-20">
+                  <div className="inline-flex items-center gap-3">
+                    <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                    <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
                   </div>
-                ) : (
-                  <>
-                    {searchQuery && (
-                      <div className="mb-4 text-sm text-neutral-400">
-                        {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
-                      </div>
-                    )}
-                    <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
-                  </>
-                )}
-              </div>
-            </>
-          ) : currentView === 'settings' ? (
+                </div>
+              ) : (
+                <>
+                  {searchQuery && (
+                    <div className="mb-4 text-sm text-neutral-400">
+                      {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
+                    </div>
+                  )}
+                  <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
+                </>
+              )}
+            </div>
+          </>
+        ) : currentView === 'settings' ? (
+          <TracingBeam className="px-6">
             <SettingsPage />
-          ) : (
+          </TracingBeam>
+        ) : (
+          <TracingBeam className="px-6">
             <div className="w-full max-w-4xl mx-auto px-6 py-8">
               <div className="text-center py-20">
                 <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
@@ -259,8 +262,8 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          )}
-        </TracingBeam>
+          </TracingBeam>
+        )}
         
         <FloatingDock items={links} />
         <MusicPlayer 

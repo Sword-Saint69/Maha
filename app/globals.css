@@ -127,7 +127,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply bg-black;
+    background-color: #000000;
+    min-height: 100vh;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground;
+    background-color: #000000;
+    min-height: 100vh;
   }
 }
