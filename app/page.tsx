@@ -16,6 +16,7 @@ import {
   IconSettings,
   IconHome,
   IconFolder,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 export default function Home() {
@@ -25,7 +26,7 @@ export default function Home() {
   const [currentTrack, setCurrentTrack] = useState<MusicFile | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [currentView, setCurrentView] = useState<'home' | 'settings'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'settings' | 'about'>('home');
 
   // Load music files from localStorage on mount
   useEffect(() => {
@@ -174,6 +175,14 @@ export default function Home() {
       onClick: handleMusicFolderSelect,
     },
     {
+      title: "About",
+      icon: (
+        <IconInfoCircle className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('about'),
+    },
+    {
       title: "Settings",
       icon: (
         <IconSettings className="h-full w-full text-neutral-500 dark:text-neutral-300" />
@@ -237,8 +246,19 @@ export default function Home() {
                 )}
               </div>
             </>
-          ) : (
+          ) : currentView === 'settings' ? (
             <SettingsPage />
+          ) : (
+            <div className="w-full max-w-4xl mx-auto px-6 py-8">
+              <div className="text-center py-20">
+                <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                  About Maha Music Player
+                </h1>
+                <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
+                  This page is currently under construction. Check back soon!
+                </p>
+              </div>
+            </div>
           )}
         </TracingBeam>
         
