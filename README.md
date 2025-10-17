@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎵 Maha Music Player
 
-## Getting Started
+A beautiful desktop music player built with **Electron.js** and **Next.js**.
 
-First, run the development server:
+## 🚀 Tech Stack
+
+- **Electron.js** - Desktop application framework
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4** - Modern styling
+- **Bun** - Fast JavaScript runtime and package manager
+
+## 📦 Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Run Next.js only (web mode)
+```bash
+bun run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Run Electron + Next.js (desktop mode)
+```bash
+bun run electron:dev
+```
+This will start the Next.js dev server and launch the Electron app.
 
-## Learn More
+## 🏗️ Build
 
-To learn more about Next.js, take a look at the following resources:
+### Build Next.js
+```bash
+bun run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Build Electron app (package)
+```bash
+bun run electron:build
+```
+This creates a distributable Electron app in the `dist/` directory.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Create package without installer
+```bash
+bun run package
+```
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+maha/
+├── app/                  # Next.js App Router pages
+├── electron/            # Electron main process files
+│   ├── main.js         # Electron main process
+│   ├── preload.js      # Preload script for IPC
+│   └── electron.d.ts   # TypeScript definitions
+├── public/             # Static assets
+├── .next/              # Next.js build output
+├── dist/               # Electron build output
+└── package.json        # Project configuration
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎯 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start Next.js dev server |
+| `bun run build` | Build Next.js for production |
+| `bun run electron` | Run Electron (requires built Next.js) |
+| `bun run electron:dev` | Run Electron + Next.js in dev mode |
+| `bun run electron:build` | Build complete Electron app |
+| `bun run package` | Package app without installer |
+| `bun run dist` | Create distributable packages |
+
+## 🎨 Features
+
+- ✨ Modern UI with Tailwind CSS
+- 🎧 Electron desktop integration
+- ⚡ Fast development with Bun
+- 🔥 Hot Module Replacement (HMR)
+- 📱 Responsive design
+- 🎯 TypeScript support
+
+## 🔧 Configuration
+
+- **Next.js config**: `next.config.ts`
+- **Electron config**: `electron/main.js`
+- **Build config**: `package.json` (under "build" section)
+- **TypeScript**: `tsconfig.json`
+- **Tailwind**: `postcss.config.mjs`
+
+## 📝 License
+
+MIT
+
+---
+
+Built with ❤️ using Electron.js and Next.js
