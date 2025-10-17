@@ -5,6 +5,11 @@ import MusicCardGrid from "@/components/music-card-grid";
 import MusicPlayer from "@/components/music-player";
 import SettingsPage from "@/components/settings-page";
 import StatsPage from "@/components/stats-page";
+import AlbumsPage from "@/components/albums-page";
+import ArtistsPage from "@/components/artists-page";
+import GenresPage from "@/components/genres-page";
+import QueuePage from "@/components/queue-page";
+import EnhancedSearch from "@/components/enhanced-search";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { TracingBeam } from "@/components/ui/tracing-beam";
@@ -20,6 +25,10 @@ import {
   IconFolder,
   IconInfoCircle,
   IconChartBar,
+  IconDisc,
+  IconMicrophone,
+  IconMusic,
+  IconPlaylist,
 } from "@tabler/icons-react";
 
 export default function Home() {
@@ -29,7 +38,7 @@ export default function Home() {
   const [currentTrack, setCurrentTrack] = useState<MusicFile | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [currentView, setCurrentView] = useState<'home' | 'settings' | 'about' | 'stats'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'albums' | 'artists' | 'genres' | 'queue' | 'settings' | 'about' | 'stats'>('home');
 
   // Load music files from localStorage on mount
   useEffect(() => {
@@ -170,6 +179,38 @@ export default function Home() {
       onClick: () => setCurrentView('home'),
     },
     {
+      title: "Albums",
+      icon: (
+        <IconDisc className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('albums'),
+    },
+    {
+      title: "Artists",
+      icon: (
+        <IconMicrophone className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('artists'),
+    },
+    {
+      title: "Genres",
+      icon: (
+        <IconMusic className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('genres'),
+    },
+    {
+      title: "Queue",
+      icon: (
+        <IconPlaylist className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "#",
+      onClick: () => setCurrentView('queue'),
+    },
+    {
       title: "Music Folder",
       icon: (
         <IconFolder className="h-full w-full text-neutral-500 dark:text-neutral-300" />
@@ -206,18 +247,16 @@ export default function Home() {
   return (
     <ThemeProvider>
       <div className="relative min-h-screen text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32" style={{ backgroundColor: 'var(--bg-primary)', minHeight: '100vh' }}>
-        <div className="absolute top-6 left-28 w-48 h-20 z-10">
-          <TextHoverEffect text="MAHA" />
-        </div>
+        {currentView === 'home' && (
+          <div className="absolute top-6 left-28 w-48 h-20 z-10">
+            <TextHoverEffect text="MAHA" />
+          </div>
+        )}
         
         {currentView === 'home' ? (
           <>
-            <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
-              <PlaceholdersAndVanishInput
-                placeholders={searchPlaceholders}
-                onChange={handleSearchChange}
-                onSubmit={handleSearchSubmit}
-              />
+            <div className="w-full max-w-2xl px-4 mb-12 relative z-10">
+              <EnhancedSearch allTracks={musicFiles} onSearchResults={setFilteredMusicFiles} />
             </div>
             
             <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
@@ -229,17 +268,37 @@ export default function Home() {
                   </div>
                 </div>
               ) : (
-                <>
-                  {searchQuery && (
-                    <div className="mb-4 text-sm text-neutral-400">
-                      {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
-                    </div>
-                  )}
-                  <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
-                </>
+                <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
               )}
             </div>
           </>
+        ) : currentView === 'albums' ? (
+          <AlbumsPage allTracks={musicFiles} onPlayTrack={handlePlayTrack} />
+        ) : currentView === 'artists' ? (
+          <ArtistsPage allTracks={musicFiles} onPlayTrack={handlePlayTrack} />
+        ) : currentView === 'genres' ? (
+          <GenresPage allTracks={musicFiles} onPlayTrack={handlePlayTrack} />
+        ) : currentView === 'queue' ? (
+          <QueuePage 
+            queue={filteredMusicFiles}
+            currentIndex={currentTrackIndex}
+            isPlaying={false}
+            onPlayTrack={(index) => {
+              setCurrentTrack(filteredMusicFiles[index]);
+              setCurrentTrackIndex(index);
+            }}
+            onRemoveTrack={(index) => {
+              const newFiles = [...filteredMusicFiles];
+              newFiles.splice(index, 1);
+              setFilteredMusicFiles(newFiles);
+            }}
+            onClearQueue={() => setFilteredMusicFiles([])}
+            onReorder={setFilteredMusicFiles}
+            shuffle={false}
+            repeat="none"
+            onToggleShuffle={() => {}}
+            onToggleRepeat={() => {}}
+          />
         ) : currentView === 'settings' ? (
           <TracingBeam className="px-6">
             <SettingsPage />
