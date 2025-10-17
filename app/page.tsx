@@ -6,6 +6,7 @@ import MusicPlayer from "@/components/music-player";
 import SettingsPage from "@/components/settings-page";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { TracingBeam } from "@/components/ui/tracing-beam";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useState, useEffect } from "react";
 import type { MusicFile } from "@/electron/electron.d";
@@ -205,39 +206,41 @@ export default function Home() {
           <TextHoverEffect text="MAHA" />
         </div>
         
-        {currentView === 'home' ? (
-          <>
-            <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
-              <PlaceholdersAndVanishInput
-                placeholders={searchPlaceholders}
-                onChange={handleSearchChange}
-                onSubmit={handleSearchSubmit}
-              />
-            </div>
-            
-            <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
-              {isLoading ? (
-                <div className="text-center py-20">
-                  <div className="inline-flex items-center gap-3">
-                    <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-                    <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {searchQuery && (
-                    <div className="mb-4 text-sm text-neutral-400">
-                      {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
+        <TracingBeam className="px-6">
+          {currentView === 'home' ? (
+            <>
+              <div className="w-full max-w-3xl px-4 mb-12 relative z-10">
+                <PlaceholdersAndVanishInput
+                  placeholders={searchPlaceholders}
+                  onChange={handleSearchChange}
+                  onSubmit={handleSearchSubmit}
+                />
+              </div>
+              
+              <div className="w-full max-w-7xl px-6 mb-24 relative z-10">
+                {isLoading ? (
+                  <div className="text-center py-20">
+                    <div className="inline-flex items-center gap-3">
+                      <div className="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                      <p className="text-lg font-medium text-neutral-300">Loading your music library...</p>
                     </div>
-                  )}
-                  <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
-                </>
-              )}
-            </div>
-          </>
-        ) : (
-          <SettingsPage />
-        )}
+                  </div>
+                ) : (
+                  <>
+                    {searchQuery && (
+                      <div className="mb-4 text-sm text-neutral-400">
+                        {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
+                      </div>
+                    )}
+                    <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            <SettingsPage />
+          )}
+        </TracingBeam>
         
         <FloatingDock items={links} />
         <MusicPlayer 
