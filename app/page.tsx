@@ -1,6 +1,7 @@
 'use client';
 
 import { FloatingDock } from "@/components/ui/floating-dock";
+import Carousel from "@/components/ui/carousel";
 import {
   IconBrandGithub,
   IconBrandX,
@@ -56,15 +57,28 @@ export default function Home() {
     },
   ];
 
+  const carouselSlides = [
+    {
+      title: "Slide 1",
+      button: "Learn More",
+      src: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=60",
+    },
+    {
+      title: "Slide 2",
+      button: "Explore",
+      src: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&auto=format&fit=crop&q=60",
+    },
+    {
+      title: "Slide 3",
+      button: "Discover",
+      src: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=60",
+    },
+  ];
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-900 via-black to-indigo-900 text-white flex flex-col items-center justify-center p-8">
-      <div className="text-center mb-16">
-        <h1 className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
-          Maha Music Player
-        </h1>
-        <p className="text-xl text-gray-300">
-          Your personal music experience
-        </p>
+    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-start pt-16">
+      <div className="mt-8">
+        <Carousel slides={carouselSlides} />
       </div>
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center pb-8">
         <FloatingDock items={links} />
