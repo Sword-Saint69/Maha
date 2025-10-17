@@ -32,4 +32,6 @@ contextBridge.exposeInMainWorld('electron', {
   selectMusicFolder: () => ipcRenderer.invoke('dialog:openMusicFolder'),
   // Music folder scanning
   scanMusicFolder: (folderPath) => ipcRenderer.invoke('music:scanFolder', folderPath),
+  // Open external URL
+  openExternal: (url) => ipcRenderer.invoke('shell:openExternal', url),
 });

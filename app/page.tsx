@@ -18,9 +18,11 @@ import {
 
 export default function Home() {
   const [musicFiles, setMusicFiles] = useState<MusicFile[]>([]);
+  const [filteredMusicFiles, setFilteredMusicFiles] = useState<MusicFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<MusicFile | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Load music files from localStorage on mount
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function Home() {
           const result = await window.electron.scanMusicFolder(savedPath);
           if (result.success && result.files) {
             setMusicFiles(result.files);
+            setFilteredMusicFiles(result.files);
           }
         } catch (error) {
           console.error('Error loading music library:', error);
@@ -43,6 +46,21 @@ export default function Home() {
 
     loadMusicLibrary();
   }, []);
+
+  // Filter music files when search query changes
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredMusicFiles(musicFiles);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = musicFiles.filter(file => 
+        file.title.toLowerCase().includes(query) ||
+        file.artist.toLowerCase().includes(query) ||
+        file.album.toLowerCase().includes(query)
+      );
+      setFilteredMusicFiles(filtered);
+    }
+  }, [searchQuery, musicFiles]);
 
   const handleMusicFolderSelect = async () => {
     // Check if running in Electron environment
@@ -60,6 +78,7 @@ export default function Home() {
             const scanResult = await window.electron.scanMusicFolder(result.path);
             if (scanResult.success && scanResult.files) {
               setMusicFiles(scanResult.files);
+              setFilteredMusicFiles(scanResult.files);
               alert(`Successfully loaded ${scanResult.files.length} music files!`);
             } else {
               alert(`Error scanning folder: ${scanResult.error || 'Unknown error'}`);
@@ -85,33 +104,31 @@ export default function Home() {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Search value:', e.target.value);
-    // TODO: Implement search functionality
+    setSearchQuery(e.target.value);
   };
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Search submitted');
-    // TODO: Implement search submit functionality
+    // Search is handled by the useEffect watching searchQuery
   };
 
   const handlePlayTrack = (track: MusicFile) => {
-    const index = musicFiles.findIndex(f => f.filePath === track.filePath);
+    const index = filteredMusicFiles.findIndex(f => f.filePath === track.filePath);
     setCurrentTrack(track);
     setCurrentTrackIndex(index);
   };
 
   const handleNext = () => {
-    if (musicFiles.length === 0) return;
-    const nextIndex = (currentTrackIndex + 1) % musicFiles.length;
-    setCurrentTrack(musicFiles[nextIndex]);
+    if (filteredMusicFiles.length === 0) return;
+    const nextIndex = (currentTrackIndex + 1) % filteredMusicFiles.length;
+    setCurrentTrack(filteredMusicFiles[nextIndex]);
     setCurrentTrackIndex(nextIndex);
   };
 
   const handlePrevious = () => {
-    if (musicFiles.length === 0) return;
-    const prevIndex = currentTrackIndex === 0 ? musicFiles.length - 1 : currentTrackIndex - 1;
-    setCurrentTrack(musicFiles[prevIndex]);
+    if (filteredMusicFiles.length === 0) return;
+    const prevIndex = currentTrackIndex === 0 ? filteredMusicFiles.length - 1 : currentTrackIndex - 1;
+    setCurrentTrack(filteredMusicFiles[prevIndex]);
     setCurrentTrackIndex(prevIndex);
   };
 
@@ -170,13 +187,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-black via-neutral-950 to-purple-950/20 text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32">
-      {/* Animated background gradient */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
-      
+    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-start pt-16 pl-24 pb-32">
       <div className="absolute top-6 left-28 w-48 h-20 z-10">
         <TextHoverEffect text="MAHA" />
       </div>
@@ -198,7 +209,14 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <MusicCardGrid musicFiles={musicFiles} onPlayTrack={handlePlayTrack} />
+          <>
+            {searchQuery && (
+              <div className="mb-4 text-sm text-neutral-400">
+                {filteredMusicFiles.length} result{filteredMusicFiles.length !== 1 ? 's' : ''} for "{searchQuery}"
+              </div>
+            )}
+            <MusicCardGrid musicFiles={filteredMusicFiles} onPlayTrack={handlePlayTrack} />
+          </>
         )}
       </div>
       

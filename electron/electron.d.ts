@@ -20,6 +20,7 @@ export interface ElectronAPI {
   };
   selectMusicFolder: () => Promise<{ success: boolean; path: string | null }>;
   scanMusicFolder: (folderPath: string) => Promise<{ success: boolean; files?: MusicFile[]; error?: string }>;
+  openExternal: (url: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 declare global {

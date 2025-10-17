@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, protocol } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, protocol, shell } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 const mm = require('music-metadata');
@@ -72,6 +72,17 @@ app.whenReady().then(() => {
       return { success: true, path: result.filePaths[0] };
     }
     return { success: false, path: null };
+  });
+
+  // Open external URL in default browser
+  ipcMain.handle('shell:openExternal', async (event, url) => {
+    try {
+      await shell.openExternal(url);
+      return { success: true };
+    } catch (error) {
+      console.error('Error opening external URL:', error);
+      return { success: false, error: error.message };
+    }
   });
 
   // Scan music folder and extract metadata
